@@ -50,6 +50,7 @@
 
 #define IPV4_LEN            16      //
 #define IPV6_LEN            64      //
+#define MACADDR_LEN            17      //
 
 //param
 class DVR_PARAM
@@ -108,10 +109,49 @@ class IOTC_CONFIG
 
 };
 
+
+class IOTC_DEVICE
+{
+  public:
+	//BASE
+	String	sLocaleName;		//현장명
+	String	sSerialNo;   //시리얼번호
+	WORD	nUDPPort;
+
+	String	sIPAddress;
+	String	sMacAddress;
+
+
+	String	sWebUrl;
+
+    //기타 세팅관련 추가
+
+
+};
+IOTC_DEVICE * ioDevice;
+
 //cmd
 const String CMD_GET_CONFIG = "GET_CONFIG";
 const String CMD_SET_CONFIG = "SET_CONFIG";
 const String CMD_RETURN_CONFIG = "RETURN_CONFIG";
+
+
+#define URL_WEB_BASE_INFO          "http://iotc365.com/test_locale/apk/web_base_info.json"
+#define URL_PC_WEB_BASE_INFO       "http://iotc365.com/test_locale/win/web_base_info.json"
+#define URL_GET_LOCALE_SETTING     "http://iotc365.com/test_locale/muin_set3/muin_set3.json"
+
+#define APK_INFO_ColCount 4
+#define APK_INFO_LineCount 3
+
+#define _C_NAME			1
+#define _C_WEB_URL		2
+#define _C_UDP_PORT		3
+#define _C_MACADDR		4
+
+#define _L_CUSTOM       1
+#define _C_DISC			2
+
+String APK_INFO[APK_INFO_LineCount][APK_INFO_ColCount];
 
 #define CFG_MAX_COLUMN      50
 #define CFG_MAX_RECORD      50

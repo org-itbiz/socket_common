@@ -11,16 +11,6 @@
 #include <System.DateUtils.hpp>
 #include <System.Types.hpp>
 
-
-#if defined(_PLAT_ANDROID)
-
-#include <Androidapi.JNI.Net.hpp>
-#include <Androidapi.Helpers.hpp>
-#include <Androidapi.JNI.JavaTypes.hpp>
-#include <Androidapi.JNI.GraphicsContentViewText.hpp>
-#include <Androidapi.JNIBridge.hpp>
-
-#endif
 #if defined(_PLAT_IOS)
 //_PLAT_IOS
 #else
@@ -29,9 +19,16 @@
 #endif
 #endif
 
-#if defined(_PLAT_MSWINDOWS)
-//_PLAT_MSWINDOWS
+#ifdef __ANDROID_API__
+#include <Androidapi.JNI.JavaTypes.hpp>
+#include <Androidapi.JNI.Net.hpp>
+#include <Androidapi.Helpers.hpp>
+#include <Androidapi.JNIBridge.hpp>
 
+#elif _WIN32
+
+//#include <Winapi.Winsock2.hpp>
+#include <Winapi.IpHlpApi.hpp>
 #endif
 
 
@@ -56,7 +53,6 @@ public:
 };
 //---------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
 class TUtilHelper: public System::TObject {
@@ -76,6 +72,7 @@ class TUtilHelper: public System::TObject {
 	String __fastcall GetComputerName(AnsiString localIp);
 	String __fastcall GetIpByDomainName(char *szHost);
 	bool __fastcall GetIpByDomainName2(char *szHost, char szIp[10][256], int *nCount);
+	String __fastcall GetMacAddress();
 	String __fastcall GetInternetIP(String szHost);
 	int __fastcall GetIPAddressEndPoint(AnsiString localIp);
 

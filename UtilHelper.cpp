@@ -6,12 +6,14 @@
 #include "UtilHelper.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#if defined(_PLAT_MSWINDOWS)
 #pragma link "jsoncpp.lib"
+#pragma comment(lib, "iphlpapi.lib")
+#endif
 
 TUtilHelper *UtilHelper;
 
 //---------------------------------------------------------------------------
-
 __fastcall TUtilHelper::TUtilHelper()
 {
 //
@@ -69,7 +71,7 @@ String __fastcall TUtilHelper::GetLocalIP()
 	}
 	else
 	{
-		sprintf(ip, "%s", "NULL");
+		sprintf(ip, "%s", "");
 	}
 	#endif
 	#endif
@@ -150,6 +152,50 @@ bool __fastcall TUtilHelper::GetIpByDomainName2(char *szHost, char szIp[10][256]
 
 }
 //---------------------------------------------------------------------------
+
+String __fastcall TUtilHelper::GetMacAddress()
+{
+    String sMacAddress;
+	#if defined(__ANDROID__)
+	_di_JObject WifiManagerObj;
+	_di_JWifiManager WifiManager;
+	_di_JWifiInfo WifiInfo;
+
+	WifiManagerObj = SharedActivityContext()->getSystemService(TJContext::JavaClass->WIFI_SERVICE);
+
+	if( WifiManagerObj !=NULL )
+	{
+		WifiManager = TJWifiManager::Wrap( static_cast<_di_ILocalObject>(WifiManagerObj)->GetObjectID());
+		WifiInfo = WifiManager->getConnectionInfo();
+
+		sMacAddress = JStringToString(WifiInfo->getMacAddress());
+	}
+
+	#elif _WIN32
+
+	IP_ADAPTER_INFO AdapterInfo[16];
+	DWORD dwBufLen = sizeof(AdapterInfo);
+	DWORD dwStatus = GetAdaptersInfo(AdapterInfo, &dwBufLen);
+	if (dwStatus != 0)
+	{
+
+	}
+	else
+	{
+		PIP_ADAPTER_INFO pAdapterInfo = AdapterInfo;
+		sMacAddress.sprintf(L"%02x:%02x:%02x:%02x:%02x:%02x",
+			pAdapterInfo->Address[0],
+			pAdapterInfo->Address[1],
+			pAdapterInfo->Address[2],
+			pAdapterInfo->Address[3],
+			pAdapterInfo->Address[4],
+			pAdapterInfo->Address[5]);
+	}
+	#endif
+
+	return sMacAddress;
+}
+//---------------------------------------------------------------------------
 /*
 String __fastcall TUtilHelper::GetInternetIP(String szHost)
 {
@@ -185,7 +231,7 @@ int __fastcall TUtilHelper::GetIPAddressEndPoint(AnsiString localIp)
 	{
 		endPoint = strArr[3].ToInt();
 	}
-    strArr.Length = 0;
+	strArr.Length = 0;
 
 	return endPoint;
 }

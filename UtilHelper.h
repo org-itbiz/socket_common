@@ -10,6 +10,15 @@
 #include <System.StrUtils.hpp>
 #include <System.DateUtils.hpp>
 #include <System.Types.hpp>
+//#include <IdBaseComponent.hpp>
+//#include <IdComponent.hpp>
+//#include <IdGlobal.hpp>
+//#include <IdSocketHandle.hpp>
+//#include <IdUDPBase.hpp>
+//#include <IdUDPClient.hpp>
+//#include <IdHTTP.hpp>
+//#include <IdTCPClient.hpp>
+//#include <IdTCPConnection.hpp>
 
 #if defined(_PLAT_IOS)
 //_PLAT_IOS
@@ -26,8 +35,6 @@
 #include <Androidapi.JNIBridge.hpp>
 
 #elif _WIN32
-
-//#include <Winapi.Winsock2.hpp>
 #include <Winapi.IpHlpApi.hpp>
 #endif
 
@@ -73,13 +80,14 @@ class TUtilHelper: public System::TObject {
 	String __fastcall GetIpByDomainName(char *szHost);
 	bool __fastcall GetIpByDomainName2(char *szHost, char szIp[10][256], int *nCount);
 	String __fastcall GetMacAddress();
-	String __fastcall GetInternetIP(String szHost);
+	String __fastcall GetInternetIP(String sDomain);
 	int __fastcall GetIPAddressEndPoint(AnsiString localIp);
 
 	UTF8String __fastcall GetPairToString(UTF8String strJson, UTF8String pair);
 	UTF8String __fastcall GetPairToString(UTF8String strJson, UTF8String pair, UTF8String pair2);
 	int __fastcall GetPairToInt(UTF8String strJson, UTF8String pair);
 	int __fastcall GetPairToInt(UTF8String strJson, UTF8String pair, UTF8String pair2);
+	String __fastcall CreateGuid();
 
 
 	__fastcall TUtilHelper();

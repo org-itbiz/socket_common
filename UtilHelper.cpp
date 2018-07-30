@@ -196,28 +196,39 @@ String __fastcall TUtilHelper::GetMacAddress()
 	return sMacAddress;
 }
 //---------------------------------------------------------------------------
+
 /*
-String __fastcall TUtilHelper::GetInternetIP(String szHost)
+String __fastcall TUtilHelper::GetInternetIP(String sDomain)
 {
-    UTF8String strip;
+    UTF8String sJsonResult;
 
-	Idhttp::TIdHTTP *HTTP = new Idhttp::TIdHTTP(this);
+    TStringStream *ss = new TStringStream();
+	TIdHTTP *idHttp = new TIdHTTP(this);
 	try {
-		HTTP->ProtocolVersion = pv1_1;
-		HTTP->Request->Accept = "application/json";
-		HTTP->Request->ContentType = "application/json";
+		idHttp->ProtocolVersion = pv1_1;
+		idHttp->Request->Accept = "application/json";
+		idHttp->Request->ContentType = "application/json";
+		idHttp->ConnectTimeout = 3000;
+        idHttp->ReadTimeout = 3000;
 		//ssl 일경우 libeay32.dll, ssleay32.dll copy
-		String request_data = request_data.sprintf(L"http://api.iotc365.com/api/get/ip_text?domain=%s&format=json", AnsiString(szHost).c_str());
+		String request_data = request_data.sprintf(L"http://api.iotc365.com/api/get/ip_text?domain=%s&format=json", AnsiString(sDomain).c_str());
 
-		strip = HTTP->Get(request_data);
+//		sJsonResult = idHttp->Get(request_data.Trim());
+		idHttp->Get(request_data.Trim(), ss);
+		ss->Position = 0;
+		sJsonResult = ss->DataString.Trim();
+        //jsonobj 로 변경
 	}
 	catch (Exception &e)
 	{
 
 	}
 
-	HTTP->Free();
-	return strip;
+	idHttp->Free();
+	delete idHttp;
+    delete ss;
+
+	return sJsonResult;
 }
 */
 //---------------------------------------------------------------------------
@@ -378,5 +389,20 @@ int __fastcall TUtilHelper::GetPairToInt(UTF8String strJson, UTF8String pair, UT
 	#else
     return -1;
 	#endif
+}
+//---------------------------------------------------------------------------
+String __fastcall TUtilHelper::CreateGuid()
+{
+	String sGuid;
+	TGUID guid;
+	if (CreateGUID(guid) == 0)
+	{
+		sGuid = sGuid.sprintf(L"%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X",
+			guid.Data1, guid.Data2, guid.Data3,
+			guid.Data4[0], guid.Data4[1], guid.Data4[2],
+			guid.Data4[3], guid.Data4[4], guid.Data4[5],
+			guid.Data4[6], guid.Data4[7]);
+	}
+	return sGuid;
 }
 //---------------------------------------------------------------------------

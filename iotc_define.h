@@ -50,7 +50,8 @@
 
 #define IPV4_LEN            16      //
 #define IPV6_LEN            64      //
-#define MACADDR_LEN            17      //
+#define MACADDR_LEN         17
+#define GUID_LEN			64
 
 //param
 class DVR_PARAM
@@ -114,14 +115,19 @@ class IOTC_DEVICE
 {
   public:
 	//BASE
-	String	sLocaleName;		//현장명
-	String	sSerialNo;   //시리얼번호
+	String	sConfigPath;
+	String	sLocaleName;	//현장명
+	String	sSerialNo;		//시리얼번호
+	String	sDeviceGuid;	//guid
+	String	sDeviceName;	//디바이스 명
 	WORD	nUDPPort;
 
 	String	sIPAddress;
 	String	sMacAddress;
 
-
+	String	sOsType;        //os
+	String	sDeviceType;    //장비 타입
+    String  sRequestUrl;
 	String	sWebUrl;
 
     //기타 세팅관련 추가
@@ -135,9 +141,7 @@ const String CMD_GET_CONFIG = "GET_CONFIG";
 const String CMD_SET_CONFIG = "SET_CONFIG";
 const String CMD_RETURN_CONFIG = "RETURN_CONFIG";
 
-
-#define URL_WEB_BASE_INFO          "http://iotc365.com/test_locale/apk/web_base_info.json"
-#define URL_PC_WEB_BASE_INFO       "http://iotc365.com/test_locale/win/web_base_info.json"
+#define URL_DEVICE_BASE          "http://api.iotc365.cn/api/device/get/base"
 #define URL_GET_LOCALE_SETTING     "http://iotc365.com/test_locale/muin_set3/muin_set3.json"
 
 #define APK_INFO_ColCount 4
